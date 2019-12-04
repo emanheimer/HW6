@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Weather Dashboard</title>
+</head>
+
+<body>
+  <!-- Retrieved data will be dumped here -->
+  <div class="city"></div>
+  <div class="wind"></div>
+  <div class="humidity"></div>
+  <div class="temp"></div>
+  <div class ="searchDiv"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  var APIKey = "8f02c2752d1d65c7acc6ec320a418cd9";
+  var userInput = $("<input>");    
+  var citySearch = userInput.val(); 
+  var submitBtn = $("<button>" + "Submit" + "</button>"); 
+  var cityDiv = $(".city"); 
+  var searchDiv = $(".searchDiv"); 
+  var windDiv = $(".wind"); 
+
+  //URL we need to query the database
+  var queryURL = "api.openweathermap.org/data/2.5/weather?q=" + "Chicago" + "&APPID=" + APIKey;
+    
+  $.ajax({
+  url: queryURL,    
+  method: "GET"
+  }).then(function(response) {
+  console.log(response);
+  });
+
+  searchDiv.append(userInput); 
+  searchDiv.append(submitBtn);     
+  
+  submitBtn.on ("click", function() {
+    console.log(citySearch); //this is not working
+    $.ajax({
+      url: queryURL,
+      method: "GET"        
+      }).then(function(response) {
+      console.log(response);
+      
+      var cityName = response.city.name; 
+      //var cityTemperature = response.temperature.value; 
+      //var cityHumidity = response.humidity.value;  
+      //var cityWind = response.wind.speed.value; 
+      
+      cityDiv.append(cityName); 
+      windDiv.append(cityHumidity); 
+    });
+  })
+
+
+
+
+
+
+//weather.icon
+//weather.main
+//main.temperature
+//main.humidity
+//wind.speed
+
+  </script>
+</body>
+
+</html>
