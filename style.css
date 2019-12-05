@@ -8,3 +8,11 @@ body {
     margin: 10px; 
 }
 
+.card-header {
+    text-align: center;
+}
+
+.jumbotron {
+    text-align: right;
+}
+

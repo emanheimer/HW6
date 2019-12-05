@@ -20,52 +20,65 @@
         <a class="navbar-brand">Weather Dashboard</a>
       </nav>
 
-
-    <div class="card border-primary mr-4" style="max-width: 16rem;">
-          <div class="card-header">Header</div>
+      <div class="jumbotron">
+        <h1 class="display-4">Current Weather</h1>
+        <p class="lead1"></p>
+        <hr class="my-4">
+        <p></p>
+        <p class="lead2">
+          Previous Searches:<div class="pastSearches"></div>
+        </p>
+      </div>  
+    
+      <div class="card border-primary mr-4" style="max-width: 16rem;">
+      <div class="card-header card-header1">Header</div>
           <div class="card-body text-primary">
-            <h5 class="card-title">Primary card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
+            <h5 class="card-title">Weather 1</h5>
+          <p class="card-text"></p>
         </div>
-        <div class="card border-secondary mr-3" style="max-width: 16rem;">
-          <div class="card-header">Header</div>
-          <div class="card-body text-secondary">
-            <h5 class="card-title">Secondary card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-        </div>
-        <div class="card border-success mr-3" style="max-width: 16rem;">
-          <div class="card-header">Header</div>
-          <div class="card-body text-success">
-            <h5 class="card-title">Success card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-        </div>
-        <div class="card border-danger mr-3" style="max-width: 16rem;">
-          <div class="card-header">Header</div>
-          <div class="card-body text-danger">
-            <h5 class="card-title">Danger card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-        </div>
-        <div class="card border-warning mr-3" style="max-width: 16rem;">
-          <div class="card-header">Header</div>
-          <div class="card-body text-warning">
-            <h5 class="card-title">Warning card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
       </div>
-  
-        <!-- Retrieved data will be dumped here -->
-    <div class="city"></div>
-    <div class="wind"></div>
-    <div class="humidity"></div>
-    <div class="temp"></div>
-  Previous Searches:<div class="pastSearches"></div>
+
+    <div class="card border-secondary mr-3" style="max-width: 16rem;">
+      <div class="card-header card-header2">Header</div>
+        <div class="card-body text-secondary">
+          <h5 class="card-title">Weather 2</h5>
+         <p class="card-text"></p>
+        </div>
+      </div>
+
+    <div class="card border-success mr-3" style="max-width: 16rem;">
+      <div class="card-header card-header3">Header</div>
+        <div class="card-body text-success">
+          <h5 class="card-title">Weather 3</h5>
+        <p class="card-text"></p>
+       </div>
+      </div>
+
+    <div class="card border-danger mr-3" style="max-width: 16rem;">
+        <div class="card-header card-header4">Header</div>
+          <div class="card-body text-danger">
+            <h5 class="card-title">Weather 4</h5>
+            <p class="card-text"></p>
+          </div>
+        </div>
+
+      <div class="card border-warning mr-3" style="max-width: 16rem;">
+        <div class="card-header card-header5">Header</div>
+          <div class="card-body text-warning">
+            <h5 class="card-title">Weather 5</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
+        
+  <div class="city"></div>    
+  <div class="wind"></div>
+  <div class="humidity"></div>
+  <div class="temp"></div>
   <div class="forecastDiv"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script type="text/javascript">
+
 
   var APIKey = "8f02c2752d1d65c7acc6ec320a418cd9";
   var userInput = $(".form-control");     
@@ -96,34 +109,51 @@
       var cityTemperature = response.main.temp;//gotta convert this
       var cityHumidity = response.main.humidity;  
       var cityWind = response.wind.speed; 
-      
-      cityDiv.text(cityName); 
-      tempDiv.text(cityTemperature);
-      humidDiv.text(cityHumidity);
-      windDiv.text(cityWind);
+
+      $(".lead1").text(cityName + ": " +  cityTemperature + ", " + cityHumidity + "%, " + cityWind + "mph"); 
       
       pastSearchesDiv.children().each(function() { //for each of the children of parentSearchesDiv...
         if ($(this).text() === citySearch) { //check to see if what the user is inputting is the same and delete if it it is
           $(this).remove(); //so that recent searches don't show up more than once
         }
       })
-      pastSearchesDiv.append("<div class=\"cityButtons\">" + citySearch+ "<div>");
+      
+      pastSearchesDiv.append("<div class=\"cityButtons\">" + citySearch + "<div>");
 
       $.ajax({
       url: forecastQueryURL + "&q=" + citySearch, 
       method: "GET"        
       }).then(function(response) {
       console.log(response.list[0].main.temp); //gotta loop through the array and display the info
-
-      for (i = 0; i < response.list.length; i++) {
-        forecastDiv.append(response.list[i].main.temp); 
-      }
+      console.log(response); 
       
+      /*
+      for (i = 0; i < response.list.length; i++) {
+       // var dateString = moment.unix(response.list[i].dt).format("MM/DD/YYYY");
+        var date = moment.unix(response.list[0].dt).format("MM/DD/YYYY"); 
+        forecastDiv.append(date); 
+      }
+      */
+      var dateString = moment.unix(response.list[0].dt).format("MM/DD/YYYY");
+      $(".card-header1").text(dateString); 
+
+      var dateString = moment.unix(response.list[14].dt).format("MM/DD/YYYY");
+      $(".card-header2").text(dateString); 
+
+      var dateString = moment.unix(response.list[22].dt).format("MM/DD/YYYY");
+      $(".card-header3").text(dateString); 
+
+      var dateString = moment.unix(response.list[30].dt).format("MM/DD/YYYY");
+      $(".card-header4").text(dateString); 
+
+      var dateString = moment.unix(response.list[33].dt).format("MM/DD/YYYY");
+      $(".card-header5").text(dateString); 
+
       });
     
     });
 
-  }
+  } 
   
   submitBtn.on ("click", function() {
     var citySearch = userInput.val(); 
