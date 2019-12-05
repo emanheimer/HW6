@@ -13,48 +13,71 @@
   <div class="humidity"></div>
   <div class="temp"></div>
   <div class ="searchDiv"></div>
+  <div class="pastSearches"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
 
   var APIKey = "8f02c2752d1d65c7acc6ec320a418cd9";
-  var userInput = $("<input>");    
-  var citySearch = userInput.val(); 
+  var userInput = $("<input>");     
   var submitBtn = $("<button>" + "Submit" + "</button>"); 
   var cityDiv = $(".city"); 
   var searchDiv = $(".searchDiv"); 
   var windDiv = $(".wind"); 
+  var tempDiv = $(".temp");
+  var humidDiv = $(".humidity"); 
+  var pastSearchesDiv = $(".pastSearches"); 
 
   //URL we need to query the database
-  var queryURL = "api.openweathermap.org/data/2.5/weather?q=" + "Chicago" + "&APPID=" + APIKey;
+  var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?APPID=" + APIKey;
+  var forecastQueryURL = "api.openweathermap.org/data/2.5/forecast?q=" + "Chicago" + "&APPID=" + APIKey;
     
-  $.ajax({
+ /* $.ajax({
   url: queryURL,    
   method: "GET"
   }).then(function(response) {
   console.log(response);
-  });
+  });*/
 
   searchDiv.append(userInput); 
   searchDiv.append(submitBtn);     
   
-  submitBtn.on ("click", function() {
-    console.log(citySearch); //this is not working
+  function getWeather(citySearch) { 
+    console.log(citySearch);
     $.ajax({
-      url: queryURL,
+      url: weatherQueryURL + "&q=" + citySearch, 
       method: "GET"        
       }).then(function(response) {
       console.log(response);
       
-      var cityName = response.city.name; 
-      //var cityTemperature = response.temperature.value; 
-      //var cityHumidity = response.humidity.value;  
-      //var cityWind = response.wind.speed.value; 
+      var cityName = response.name; 
+      var cityTemperature = response.main.temp; 
+      var cityHumidity = response.main.humidity;  
+      var cityWind = response.wind.speed; 
       
-      cityDiv.append(cityName); 
-      windDiv.append(cityHumidity); 
+      cityDiv.text(cityName); 
+      tempDiv.text(cityTemperature);
+      humidDiv.text(cityHumidity);
+      windDiv.text(cityWind);
+      
+      pastSearchesDiv.children().each(function (){
+        if ($(this).text() === citySearch) {
+          $(this).remove(); 
+        }
+      })
+      pastSearchesDiv.prepend("<div class=\"cityButtons\">" + citySearch+ "<div>");
     });
+
+  }
+  
+  submitBtn.on ("click", function() {
+    var citySearch = userInput.val(); 
+    getWeather(citySearch); 
   })
 
+  $("body").on ("click", ".cityButtons", function() { //city buttons are dynamically added, so you need to reference parent element
+    var citySearch = $(this).text(); 
+    getWeather(citySearch); 
+  })
 
 
 
