@@ -4,42 +4,84 @@
 <head>
   <meta charset="utf-8">
   <title>Weather Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
-  <!-- Retrieved data will be dumped here -->
-  <div class="city"></div>
-  <div class="wind"></div>
-  <div class="humidity"></div>
-  <div class="temp"></div>
-  <div class ="searchDiv"></div>
-  <div class="pastSearches"></div>
+
+  <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+      <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search by City Name" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <a class="navbar-brand">Weather Dashboard</a>
+      </nav>
+
+
+    <div class="card border-primary mr-4" style="max-width: 16rem;">
+          <div class="card-header">Header</div>
+          <div class="card-body text-primary">
+            <h5 class="card-title">Primary card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+        <div class="card border-secondary mr-3" style="max-width: 16rem;">
+          <div class="card-header">Header</div>
+          <div class="card-body text-secondary">
+            <h5 class="card-title">Secondary card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+        <div class="card border-success mr-3" style="max-width: 16rem;">
+          <div class="card-header">Header</div>
+          <div class="card-body text-success">
+            <h5 class="card-title">Success card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+        <div class="card border-danger mr-3" style="max-width: 16rem;">
+          <div class="card-header">Header</div>
+          <div class="card-body text-danger">
+            <h5 class="card-title">Danger card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+        <div class="card border-warning mr-3" style="max-width: 16rem;">
+          <div class="card-header">Header</div>
+          <div class="card-body text-warning">
+            <h5 class="card-title">Warning card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+      </div>
+  
+        <!-- Retrieved data will be dumped here -->
+    <div class="city"></div>
+    <div class="wind"></div>
+    <div class="humidity"></div>
+    <div class="temp"></div>
+  Previous Searches:<div class="pastSearches"></div>
+  <div class="forecastDiv"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
 
   var APIKey = "8f02c2752d1d65c7acc6ec320a418cd9";
-  var userInput = $("<input>");     
-  var submitBtn = $("<button>" + "Submit" + "</button>"); 
+  var userInput = $(".form-control");     
+  var submitBtn = $(".my-sm-0"); 
   var cityDiv = $(".city"); 
-  var searchDiv = $(".searchDiv"); 
   var windDiv = $(".wind"); 
   var tempDiv = $(".temp");
   var humidDiv = $(".humidity"); 
   var pastSearchesDiv = $(".pastSearches"); 
+  var forecastDiv = $(".forecastDiv"); 
 
   //URL we need to query the database
   var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?APPID=" + APIKey;
-  var forecastQueryURL = "api.openweathermap.org/data/2.5/forecast?q=" + "Chicago" + "&APPID=" + APIKey;
+  var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?APPID=" + APIKey;
     
- /* $.ajax({
-  url: queryURL,    
-  method: "GET"
-  }).then(function(response) {
-  console.log(response);
-  });*/
-
-  searchDiv.append(userInput); 
-  searchDiv.append(submitBtn);     
+  getWeather(localStorage.getItem("recentSearch"));
   
   function getWeather(citySearch) { 
     console.log(citySearch);
@@ -47,10 +89,11 @@
       url: weatherQueryURL + "&q=" + citySearch, 
       method: "GET"        
       }).then(function(response) {
+      
       console.log(response);
       
       var cityName = response.name; 
-      var cityTemperature = response.main.temp; 
+      var cityTemperature = response.main.temp;//gotta convert this
       var cityHumidity = response.main.humidity;  
       var cityWind = response.wind.speed; 
       
@@ -59,12 +102,25 @@
       humidDiv.text(cityHumidity);
       windDiv.text(cityWind);
       
-      pastSearchesDiv.children().each(function (){
-        if ($(this).text() === citySearch) {
-          $(this).remove(); 
+      pastSearchesDiv.children().each(function() { //for each of the children of parentSearchesDiv...
+        if ($(this).text() === citySearch) { //check to see if what the user is inputting is the same and delete if it it is
+          $(this).remove(); //so that recent searches don't show up more than once
         }
       })
-      pastSearchesDiv.prepend("<div class=\"cityButtons\">" + citySearch+ "<div>");
+      pastSearchesDiv.append("<div class=\"cityButtons\">" + citySearch+ "<div>");
+
+      $.ajax({
+      url: forecastQueryURL + "&q=" + citySearch, 
+      method: "GET"        
+      }).then(function(response) {
+      console.log(response.list[0].main.temp); //gotta loop through the array and display the info
+
+      for (i = 0; i < response.list.length; i++) {
+        forecastDiv.append(response.list[i].main.temp); 
+      }
+      
+      });
+    
     });
 
   }
@@ -72,11 +128,12 @@
   submitBtn.on ("click", function() {
     var citySearch = userInput.val(); 
     getWeather(citySearch); 
+    localStorage.setItem("recentSearch", citySearch); 
   })
 
   $("body").on ("click", ".cityButtons", function() { //city buttons are dynamically added, so you need to reference parent element
-    var citySearch = $(this).text(); 
-    getWeather(citySearch); 
+    var citySearch = $(this).text(); //get text from city button
+    getWeather(citySearch); //use it as argument for getWeather
   })
 
 
