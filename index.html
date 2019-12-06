@@ -110,6 +110,10 @@
   var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?APPID=" + APIKey;
   var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?APPID=" + APIKey;
     
+  window.onload = function() {
+  citySearch = "Chicago"; 
+  };
+  
   getWeather(localStorage.getItem("recentSearch"));
   
   function getWeather(citySearch) { 
@@ -203,7 +207,6 @@
   })
 
 
-  
 
   </script>
 </body>
