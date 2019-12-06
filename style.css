@@ -12,7 +12,21 @@ body {
     text-align: center;
 }
 
-.jumbotron {
-    text-align: right;
+.card-title {
+    text-align: center; 
 }
 
+.display-4 {
+    text-align: left; 
+}
+
+.cityButtons {
+    padding: 20px; 
+    margin: 5px; 
+    width: 15%; 
+    text-align: center; 
+    color: grey; 
+    background-color: pink;   
+    border: 1px solid grey;
+    
+}

@@ -21,7 +21,7 @@
       </nav>
 
       <div class="jumbotron">
-        <h1 class="display-4">Current Weather</h1>
+        <h1 class="display-4"></h1>
         <p class="lead1"></p>
         <hr class="my-4">
         <p></p>
@@ -31,42 +31,58 @@
       </div>  
     
       <div class="card border-primary mr-4" style="max-width: 16rem;">
-      <div class="card-header card-header1">Header</div>
+      <div class="card-header card-header1"></div>
           <div class="card-body text-primary">
-            <h5 class="card-title">Weather 1</h5>
-          <p class="card-text"></p>
+            <h5 class="card-title">Day 1</h5>
+          <p class="card-text1"></p>
+          <p class="card-text2"></p>
+          <p class="card-text3"></p>
+          <p class="card-text4"></p>
+          <!----<div id="icon"><img id="wicon" src="" alt="Weather icon"></div> for when we add the icon--> 
         </div>
       </div>
 
     <div class="card border-secondary mr-3" style="max-width: 16rem;">
-      <div class="card-header card-header2">Header</div>
+      <div class="card-header card-header2"></div>
         <div class="card-body text-secondary">
-          <h5 class="card-title">Weather 2</h5>
-         <p class="card-text"></p>
+          <h5 class="card-title">Day 2</h5>
+          <p class="card-text5"></p>
+          <p class="card-text6"></p>
+          <p class="card-text7"></p>
+          <p class="card-text8"></p>
         </div>
       </div>
 
     <div class="card border-success mr-3" style="max-width: 16rem;">
-      <div class="card-header card-header3">Header</div>
+      <div class="card-header card-header3"></div>
         <div class="card-body text-success">
-          <h5 class="card-title">Weather 3</h5>
-        <p class="card-text"></p>
+          <h5 class="card-title">Day 3</h5>
+          <p class="card-text9"></p>
+          <p class="card-text10"></p>
+          <p class="card-text11"></p>
+          <p class="card-text12"></p>
        </div>
       </div>
 
     <div class="card border-danger mr-3" style="max-width: 16rem;">
-        <div class="card-header card-header4">Header</div>
+        <div class="card-header card-header4"></div>
           <div class="card-body text-danger">
-            <h5 class="card-title">Weather 4</h5>
-            <p class="card-text"></p>
+            <h5 class="card-title">Day 4</h5>
+            <p class="card-text13"></p>
+            <p class="card-text14"></p>
+            <p class="card-text15"></p>
+            <p class="card-text16"></p>
           </div>
         </div>
 
       <div class="card border-warning mr-3" style="max-width: 16rem;">
-        <div class="card-header card-header5">Header</div>
+        <div class="card-header card-header5"></div>
           <div class="card-body text-warning">
-            <h5 class="card-title">Weather 5</h5>
-          <p class="card-text"></p>
+            <h5 class="card-title">Day 5</h5>
+            <p class="card-text17"></p>
+            <p class="card-text18"></p>
+            <p class="card-text19"></p>
+            <p class="card-text20"></p>
         </div>
       </div>
         
@@ -106,11 +122,16 @@
       console.log(response);
       
       var cityName = response.name; 
-      var cityTemperature = response.main.temp;//gotta convert this
+      var cityTemperature = response.main.temp; 
       var cityHumidity = response.main.humidity;  
       var cityWind = response.wind.speed; 
 
-      $(".lead1").text(cityName + ": " +  cityTemperature + ", " + cityHumidity + "%, " + cityWind + "mph"); 
+      cityTemperature = ((((cityTemperature - 273.15)*9)/5) + 32).toFixed(1); 
+
+      $(".display-4").text("Current Weather for " + cityName); 
+     
+     
+      $(".lead1").text("Temperature: " + cityTemperature + "°F, " + "Humidity: " + cityHumidity + "%, " + "Wind Speed: " + cityWind + "mph"); 
       
       pastSearchesDiv.children().each(function() { //for each of the children of parentSearchesDiv...
         if ($(this).text() === citySearch) { //check to see if what the user is inputting is the same and delete if it it is
@@ -127,27 +148,40 @@
       console.log(response.list[0].main.temp); //gotta loop through the array and display the info
       console.log(response); 
       
-      /*
-      for (i = 0; i < response.list.length; i++) {
-       // var dateString = moment.unix(response.list[i].dt).format("MM/DD/YYYY");
-        var date = moment.unix(response.list[0].dt).format("MM/DD/YYYY"); 
-        forecastDiv.append(date); 
-      }
-      */
-      var dateString = moment.unix(response.list[0].dt).format("MM/DD/YYYY");
-      $(".card-header1").text(dateString); 
+      var dateString1 = moment.unix(response.list[4].dt).format("MM/DD/YYYY");
+      $(".card-header1").text(dateString1); 
+      $(".card-text1").text("Temperature: " + ((((response.list[4].main.temp - 273.15)*9)/5) + 32).toFixed(1) + "°F"); 
+      $(".card-text2").text("Humidity: " + response.list[4].main.humidity + "%"); 
+      $(".card-text3").text("Wind Speed: " + response.list[4].wind.speed + "mph"); 
+      //$("#card-text4").val(response.list[4].weather.icon); 
 
-      var dateString = moment.unix(response.list[14].dt).format("MM/DD/YYYY");
-      $(".card-header2").text(dateString); 
+      var dateString2 = moment.unix(response.list[12].dt).format("MM/DD/YYYY");
+      $(".card-header2").text(dateString2); 
+      $(".card-text5").text("Temperature: " + ((((response.list[12].main.temp - 273.15)*9)/5) + 32).toFixed(1) + "°F");
+      $(".card-text6").text("Humidity: " + response.list[12].main.humidity + "%"); 
+      $(".card-text7").text("Wind Speed: " + response.list[12].wind.speed + "mph"); 
+      //$(".card-text8").text(response.list[12].wind.speed); 
 
-      var dateString = moment.unix(response.list[22].dt).format("MM/DD/YYYY");
-      $(".card-header3").text(dateString); 
+      var dateString3 = moment.unix(response.list[20].dt).format("MM/DD/YYYY");
+      $(".card-header3").text(dateString3);
+      $(".card-text9").text("Temperature: " + ((((response.list[20].main.temp - 273.15)*9)/5) + 32).toFixed(1) + "°F");
+      $(".card-text10").text("Humidity: " + response.list[20].main.humidity + "%"); 
+      $(".card-text11").text("Wind Speed: " + response.list[20].wind.speed + "mph"); 
+      //$(".card-text12").text(response.list[20].wind.speed); 
 
-      var dateString = moment.unix(response.list[30].dt).format("MM/DD/YYYY");
-      $(".card-header4").text(dateString); 
+      var dateString4 = moment.unix(response.list[28].dt).format("MM/DD/YYYY");
+      $(".card-header4").text(dateString4); 
+      $(".card-text13").text("Temperature: " + ((((response.list[28].main.temp - 273.15)*9)/5) + 32).toFixed(1) + "°F");; 
+      $(".card-text14").text("Humidity: " + response.list[28].main.humidity + "%"); 
+      $(".card-text15").text("Wind Speed: " + response.list[28].wind.speed + "mph"); 
+      //$(".card-text16").text(response.list[28].wind.speed); 
 
-      var dateString = moment.unix(response.list[33].dt).format("MM/DD/YYYY");
-      $(".card-header5").text(dateString); 
+      var dateString5 = moment.unix(response.list[36].dt).format("MM/DD/YYYY");
+      $(".card-header5").text(dateString5); 
+      $(".card-text17").text("Temperature: " + ((((response.list[36].main.temp - 273.15)*9)/5) + 32).toFixed(1) + "°F");; 
+      $(".card-text18").text("Humidity: " + response.list[36].main.humidity + "%"); 
+      $(".card-text19").text("Wind Speed: " + response.list[36].wind.speed + "mph"); 
+      //$(".card-text20").text(response.list[36].wind.speed); 
 
       });
     
@@ -155,10 +189,12 @@
 
   } 
   
-  submitBtn.on ("click", function() {
+  submitBtn.on ("click", function(event) {
+    event.preventDefault(); 
     var citySearch = userInput.val(); 
     getWeather(citySearch); 
     localStorage.setItem("recentSearch", citySearch); 
+    console.log(cityCoord); 
   })
 
   $("body").on ("click", ".cityButtons", function() { //city buttons are dynamically added, so you need to reference parent element
@@ -167,14 +203,7 @@
   })
 
 
-
-
-
-//weather.icon
-//weather.main
-//main.temperature
-//main.humidity
-//wind.speed
+  
 
   </script>
 </body>
